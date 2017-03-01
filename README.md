@@ -132,20 +132,24 @@ After this, I fit my lane lines with a 2nd order polynomial for each line:
 $$ f(y) = A y^2 + B y + C $$
 and draw the resulting parabola in yellow.
 In the following picture we can see the result of the blind search function.
+
 ![Blind search][image5]
 
 For the following image in the pipeline, it is possible to take advantage of the previous information, considering that the coefficients of the polynomial won't change a lot. So for the "fast search" algorithm, I took the previous polynomial and found the pixels within some range of that estimated lane lines, 
 and fit again with a 2nd order polynomial using these new pixels, 
 as we can see in the output of that function:
+
 ![Fast search][image55]
 
 
 ####5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
 The radius of curvature at some point $y$ for a second order polynomial can be computed with the following formula:
-$$ R_{curve}(y) = \frac{(1 + (2Ay + B)^2 )^{3/2}}{|2A|}
+
+$$ R_{curve}(y) = \frac{(1 + (2Ay + B)^2 )^{3/2}}{|2A|} $$
 
 For this application, I evaluated this formula at the bottom of the image, so 
+
 $$ y = imagesize_y $$
 
 ####6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.

@@ -565,7 +565,7 @@ def visualize_lines_search_fast(binary_warped, left_line, right_line):
 #  plt.savefig('examples/search_fast.jpg')
 
 # --------------------------------------------------------------------------- #
-# Unwrap 
+# Unwrap the lane mask to the original undistorted image
 def visualize_unwraped(image, binary_warped, left_fit, right_fit, Minv):
   ploty = np.linspace(0, binary_warped.shape[0]-1, binary_warped.shape[0] )
   left_fitx = left_fit[0]*ploty**2 + left_fit[1]*ploty + left_fit[2]
@@ -591,6 +591,7 @@ def visualize_unwraped(image, binary_warped, left_fit, right_fit, Minv):
   return result
 
 # --------------------------------------------------------------------------- #  
+# Add legends to the image (radius of curvature and center offset)
 def put_text(img, R, offset):
   text = 'Radius of Curvature: {}m'.format(int(R))
   text2 = 'Center offset {:.1f}m'.format(offset)
@@ -606,7 +607,8 @@ def put_text(img, R, offset):
 # Final Pipeline
 # Input:
 # mtx, dist
-# xm_per_pix, ym_per_pix
+# left_line, right_line
+# blind: A flag to determine whether to use the "blind" or the "fast" search algorithm
 def pipeline(image, mtx, dist, left_line, right_line, blind=False):
   # Undistort test image
   undistorted = cv2.undistort(image, mtx, dist, None, mtx)
@@ -622,16 +624,12 @@ def pipeline(image, mtx, dist, left_line, right_line, blind=False):
   binary = color_and_gradient(undistorted, sobel_kernel=sobel_kernel, 
                               thresh=thresh, verbose=False)
   
+  # Wrap binary image
   img_size = (image.shape[1], image.shape[0])
   src, dst = points_for_warper(img_size)
-  M = cv2.getPerspectiveTransform(src, dst)
-  Minv = np.linalg.inv(M)
   binary_warped = warper(binary, src, dst)
-  # Esto va recién para la versión 2
-#  if DEBUG:
-#    undistorted_warped = warper(undistorted, src, dst)
 
-  # Blind
+  # Determine which search algorithm to use
   if blind:
     blind_img = find_lines_blind(binary_warped, left_line, right_line)
   else:
@@ -640,5 +638,8 @@ def pipeline(image, mtx, dist, left_line, right_line, blind=False):
   left_fit = left_line.current_fit
   right_fit = right_line.current_fit
 
+  # Draw the detected lane region on the original undistorted image.
+  M = cv2.getPerspectiveTransform(src, dst)
+  Minv = np.linalg.inv(M)
   result = visualize_unwraped(undistorted, binary_warped, left_fit, right_fit, Minv)
   return result

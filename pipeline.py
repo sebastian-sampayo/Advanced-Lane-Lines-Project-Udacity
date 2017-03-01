@@ -16,7 +16,7 @@ import matplotlib.image as mpimg
 import pickle
 
 from utils import *
-from Camera import *
+#from Camera import *
 from Line import *
 
 # --------------------------------------------------------------------------- #
@@ -121,6 +121,7 @@ ax2.imshow(binary_warped_lines)
 
 
 # --------------------------------------------------------------------------- #
+# Find and plot lane lines
 left_line = Line()
 right_line = Line()
 out_img = find_lines_blind(binary_warped, left_line, right_line)
