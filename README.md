@@ -195,5 +195,5 @@ Here's a [link to my video result](./output_challenge_allblind_video.mp4)
 
 ####1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
-The result in the challenging video is worst, because all the thresholds and parameters where adjusted analyzing images of the first project video. To achieve better results, it would be necessary to re-adjust these parameters with images from the challenging video.
+The result in the challenging video is worst, because all the thresholds and parameters where adjusted analyzing images of the first project video. To achieve better results, it would be necessary to re-adjust these parameters with images from the challenging video, or trying different combinations of gradient and color.
 There are also other methods to make the algorithm more robust, and they should be researched for future work on this project.
