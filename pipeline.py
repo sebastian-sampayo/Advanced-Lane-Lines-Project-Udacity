@@ -22,8 +22,8 @@ from Line import *
 # --------------------------------------------------------------------------- #
 camera_calibration_filename = 'camera_cal/mtx_dist_pickle.p'
 input_filename = 'test_images/test2.jpg'
-output_filename = 'examples/binary_test6.jpg'
-perspective_filename = 'examples/perspective_straight_lines2.jpg'
+output_filename = 'output_images/binary_test6.jpg'
+perspective_filename = 'output_images/perspective_straight_lines2.jpg'
 
 # --------------------------------------------------------------------------- #
 # Load camera calibration matrix and distortion coefficients
@@ -146,4 +146,4 @@ result = put_text(result, R, offset)
 
 plt.figure()
 plt.imshow(result)
-#plt.savefig('examples/final_result.jpg')
+#plt.savefig('output_images/final_result.jpg')

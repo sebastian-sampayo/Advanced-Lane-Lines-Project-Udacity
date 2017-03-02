@@ -448,7 +448,7 @@ def center_offset(img_size, left_line, right_line, xm_per_pix = 3.7/700):
   x_right = right_fit[0]*y_eval**2 + right_fit[1]*y_eval + right_fit[2]
 
   # Assuming the camera is centered at the middle width of the car:
-  offset = ((x_left + x_right)/2 - img_size[1]/2 )* xm_per_pix
+  offset = ((x_left + x_right)/2 - img_size[0]/2 )* xm_per_pix
 
   return offset
   
@@ -594,7 +594,7 @@ def visualize_unwraped(image, binary_warped, left_fit, right_fit, Minv):
 # Add legends to the image (radius of curvature and center offset)
 def put_text(img, R, offset):
   text = 'Radius of Curvature: {}m'.format(int(R))
-  text2 = 'Center offset {:.1f}m'.format(offset)
+  text2 = 'Center offset {:.2f}m'.format(offset)
   text_pos = (50, 100)
   text2_pos = (50, 200)
   font = cv2.FONT_HERSHEY_SIMPLEX
