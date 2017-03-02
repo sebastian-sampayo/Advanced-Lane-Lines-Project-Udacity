@@ -214,9 +214,16 @@ def normalize(image):
 # Thresholds work best from:
 # https://chatbotslife.com/advanced-lane-line-project-7635ddca1960#.uw016flos
 def yellow_threshold(image, thresh_min=(0, 100, 100), thresh_max=(50, 255, 255)):
-  HLS = cv2.cvtColor(image, cv2.COLOR_RGB2HLS)
-  yellow = cv2.inRange(HLS, thresh_min, thresh_max)
+#  HLS = cv2.cvtColor(image, cv2.COLOR_RGB2HLS)
+#  yellow = cv2.inRange(HLS, thresh_min, thresh_max)
+#  yellow = normalize(yellow)
+#  
+  HSV = cv2.cvtColor(image, cv2.COLOR_RGB2HSV)
+
+  # For yellow
+  yellow = cv2.inRange(HSV, (20, 100, 100), (50, 255, 255))
   yellow = normalize(yellow)
+
   return yellow
 
 # --------------------------------------------------------------------------- #
@@ -225,9 +232,25 @@ def yellow_threshold(image, thresh_min=(0, 100, 100), thresh_max=(50, 255, 255))
 # Thresholds work best from:
 # https://medium.com/@royhuang_87663/how-to-find-threshold-f05f6b697a00#.ebexlpkil
 def white_threshold(image, thresh_min=(10, 200, 150), thresh_max=(40, 255, 255)):
-  HLS = cv2.cvtColor(image, cv2.COLOR_RGB2HLS)
-  white = cv2.inRange(HLS, thresh_min, thresh_max)
-  white = normalize(white)
+#  HLS = cv2.cvtColor(image, cv2.COLOR_RGB2HLS)
+#  white = cv2.inRange(HLS, thresh_min, thresh_max)
+#  white = normalize(white)
+  
+  # For white
+  HSV = cv2.cvtColor(image, cv2.COLOR_RGB2HSV)
+  sensitivity_1 = 68 
+  white_1 = cv2.inRange(HSV, (0,0,255-sensitivity_1), (255,20,255))
+  white_1 = normalize(white_1)
+  
+  sensitivity_2 = 60
+  HSL = cv2.cvtColor(image, cv2.COLOR_RGB2HLS)
+  white_2 = cv2.inRange(HSL, (0,255-sensitivity_2,0), (255,255,sensitivity_2))
+  white_3 = cv2.inRange(image, (200,200,200), (255,255,255))
+  white_2 = normalize(white_2)
+  white_3 = normalize(white_3)
+  
+  white = np.zeros_like(white_1)
+  white[(white_1 == 1) | (white_2 == 1) | (white_3 == 1)]
   return white
 
 # --------------------------------------------------------------------------- #
@@ -613,6 +636,11 @@ def pipeline(image, mtx, dist, left_line, right_line, blind=False):
   # Undistort test image
   undistorted = cv2.undistort(image, mtx, dist, None, mtx)
   
+  # Wrap undistorted image
+  img_size = (image.shape[1], image.shape[0])
+  src, dst = points_for_warper(img_size)
+  warped = warper(undistorted, src, dst)
+  
   # Binary output
   sobel_kernel = 3
   thresh = [
@@ -621,14 +649,10 @@ def pipeline(image, mtx, dist, left_line, right_line, blind=False):
            (0.7, 1.3), 
            (170, 255)
            ]
-  binary = color_and_gradient(undistorted, sobel_kernel=sobel_kernel, 
+  binary_warped = color_and_gradient(warped, sobel_kernel=sobel_kernel, 
                               thresh=thresh, verbose=False)
   
-  # Wrap binary image
-  img_size = (image.shape[1], image.shape[0])
-  src, dst = points_for_warper(img_size)
-  binary_warped = warper(binary, src, dst)
-
+  
   # Determine which search algorithm to use
   if blind:
     blind_img = find_lines_blind(binary_warped, left_line, right_line)
