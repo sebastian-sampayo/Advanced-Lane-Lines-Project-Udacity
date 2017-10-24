@@ -34,17 +34,17 @@ The results turned out really successfully, as you can see in [this video](https
 [poly]: ./output_images/poly.png "Second order polynomial"
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/571/view) Points
-###Here I will consider the rubric points individually and describe how I addressed each point in my implementation.  
+### Here I will consider the rubric points individually and describe how I addressed each point in my implementation.  
 
 ---
-###Writeup / README
+### Writeup / README
 
-####1. Provide a Writeup / README that includes all the rubric points and how you addressed each one.  You can submit your writeup as markdown or pdf.  [Here](https://github.com/udacity/CarND-Advanced-Lane-Lines/blob/master/writeup_template.md) is a template writeup for this project you can use as a guide and a starting point.  
+#### 1. Provide a Writeup / README that includes all the rubric points and how you addressed each one.  You can submit your writeup as markdown or pdf.  [Here](https://github.com/udacity/CarND-Advanced-Lane-Lines/blob/master/writeup_template.md) is a template writeup for this project you can use as a guide and a starting point.  
 
 You're reading it!
-###Camera Calibration
+### Camera Calibration
 
-####1. Briefly state how you computed the camera matrix and distortion coefficients. Provide an example of a distortion corrected calibration image.
+#### 1. Briefly state how you computed the camera matrix and distortion coefficients. Provide an example of a distortion corrected calibration image.
 
 The code for this step is contained in the file `camera_calibration.py`, that also uses a function `calibrate_camera()` from `utils.py` (lines 23-60)
 
@@ -56,14 +56,14 @@ I then used the output `objpoints` and `imgpoints` to compute the camera calibra
 
 
 
-###Pipeline (single images)
+### Pipeline (single images)
 
-####1. Provide an example of a distortion-corrected image.
+#### 1. Provide an example of a distortion-corrected image.
 To demonstrate this step, I will describe how I apply the distortion correction to one of the test images like this one:
 
 ![alt text][image2]
 
-####2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
+#### 2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
 
 I used a combination of color and gradient thresholds to generate a binary image (thresholding steps at lines 62 through 273, in `utils.py`). 
 As for the gradient, I used a combination of threshold ranges for the gradient in the 'x' direction, 'y' direction, the magnitude of the gradient and the direction of the gradient.
@@ -92,7 +92,7 @@ Here's an example of my output for this step.
 ![Binary example][image3]
 
 
-####3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
+#### 3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
 
 The code for my perspective transform includes a function called `warper()`, which appears in lines 302 through 312 in the file `utils.py`.  The `warper()` function takes as inputs an image (`img`), as well as source (`src`) and destination (`dst`) points. 
 To calculate this points, I wrote a function taking the image size as an input in the following manner:
@@ -128,7 +128,7 @@ In the following figure, we can see all the binary outputs of the gradient and c
 ![Gradient and color thresholds warped][thresholds_warped]
 
 
-####4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
+#### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 
 In order to identify lane-line pixels I coded 2 functions: 
 
@@ -154,7 +154,7 @@ as we can see in the output of that function:
 ![Fast search][image55]
 
 
-####5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
+#### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
 The radius of curvature at some point *y* for a second order polynomial can be computed with the following formula:
 
@@ -166,7 +166,7 @@ For this application, I evaluated this formula at the bottom of the image, so
 
 Furthermore, I took a moving average of the last 30 calculated radius of curvature to smooth a little bit this measurement.
 
-####6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
+#### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
 I implemented this step in lines 567 through 604 in my code in `utils.py` in the functions `visualize_unwraped()` and `put_text()`.  Here is an example of my result on a test image:
 
@@ -174,9 +174,9 @@ I implemented this step in lines 567 through 604 in my code in `utils.py` in the
 
 ---
 
-###Pipeline (video)
+### Pipeline (video)
 
-####1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (wobbly lines are ok but no catastrophic failures that would cause the car to drive off the road!).
+#### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (wobbly lines are ok but no catastrophic failures that would cause the car to drive off the road!).
 
 Here's a [link to my video result](https://youtu.be/zItOA7QE9b4)
 
@@ -191,9 +191,9 @@ Here's a [link to my video result](./output_challenge_allblind_video.mp4)
 
 ---
 
-###Discussion and future work
+### Discussion and future work
 
-####1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
+#### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
 The result in the challenging video is worst, because all the thresholds and parameters where adjusted analyzing images of the first project video. To achieve better results, it would be necessary to re-adjust these parameters with images from the challenging video, or trying different combinations of gradient and color.
 There are also other methods to make the algorithm more robust, and they should be researched for future work on this project.

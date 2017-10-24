@@ -21,7 +21,7 @@ from Line import *
 
 # --------------------------------------------------------------------------- #
 camera_calibration_filename = 'camera_cal/mtx_dist_pickle.p'
-input_filename = 'test_images/test2.jpg'
+input_filename = 'test_images/test5.jpg'
 output_filename = 'output_images/binary_test6.jpg'
 perspective_filename = 'output_images/perspective_straight_lines2.jpg'
 
